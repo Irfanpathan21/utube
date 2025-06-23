@@ -3,10 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtube & Player</title>
+    <title>Online HTML Compiler (Download Option)</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* dark grey for track */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* slightly lighter dark grey for thumb */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* even lighter on hover */
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide body scrollbar as content is in flex containers */
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background-color: #1a202c; /* Dark background for code areas */
+            color: #e2e8f0; /* Light text color */
+            border: none;
+            outline: none;
+            resize: none;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #ffffff; /* White background for preview */
+        }
+
+        /* Styles for custom alert box */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate(-50%, -70%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOutUp {
+            from { opacity: 1; transform: translate(-50%, -50%); }
+            to { opacity: 0; transform: translate(-50%, -70%); }
+        }
+        .animate-fade-out-up {
+            animation: fadeOutUp 0.3s ease-in forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col h-screen">
+
+    <!-- Header -->
+    <header class="bg-gray-800 p-4 shadow-md flex justify-between items-center rounded-b-lg">
+        <h1 class="text-2xl font-bold text-blue-400">
+            <span class="text-blue-200">Online</span> HTML Compiler
+        </h1>
+        <div class="flex items-center space-x-4">
+            <button id="toggle-editor-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                Toggle Editor
+            </button>
+            <button id="download-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                Download sample.html
+            </button>
+            <span class="text-sm text-gray-400">Powered by Gemini</span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex flex-grow overflow-hidden p-4 space-x-4">
+        <!-- Code Editor Section -->
+        <section id="editor-section" class="flex flex-col w-1/2 h-full space-y-4 transition-all duration-300 ease-in-out">
+            <!-- HTML Editor -->
+            <div class="flex flex-col bg-gray-800 rounded-lg shadow-lg flex-1 overflow-hidden">
+                <div class="bg-gray-700 text-gray-200 p-3 font-semibold rounded-t-lg">HTML Input</div>
+                <textarea id="html-code" class="rounded-b-lg" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Youtube &amp; Player&lt;/title&gt;
+    &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"&gt;
+    &lt;style&gt;
         /* Global styles */
         body {
             font-family: 'Inter', sans-serif;
@@ -144,90 +244,90 @@
             border: 0;
         }
     </style>
-</head>
-<body>
-    <header id="search-header" class="bg-white shadow-md p-4 sticky top-0 z-10">
-        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <h1 class="text-2xl font-bold text-red-600 mb-2 md:mb-0">Youtube</h1>
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header id="search-header" class="bg-white shadow-md p-4 sticky top-0 z-10"&gt;
+        &lt;div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4"&gt;
+            &lt;h1 class="text-2xl font-bold text-red-600 mb-2 md:mb-0"&gt;Youtube&lt;/h1&gt;
             
-            <div id="api-key-section" class="flex-grow flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
-                <input type="password" id="api-key-input" placeholder="Enter your YouTube Data API Key"
-                       class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full sm:w-auto">
-                <button id="save-api-key-button"
-                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto">
+            &lt;div id="api-key-section" class="flex-grow flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto"&gt;
+                &lt;input type="password" id="api-key-input" placeholder="Enter your YouTube Data API Key"
+                       class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-full sm:w-auto"&gt;
+                &lt;button id="save-api-key-button"
+                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto"&gt;
                     Save API Key
-                </button>
-            </div>
+                &lt;/button&gt;
+            &lt;/div&gt;
 
-            <div id="search-controls" class="flex-grow flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto hidden">
-                <input type="text" id="search-input" placeholder="Search for videos or playlists..."
-                       class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 w-full sm:w-auto">
-                <button id="search-button"
-                        class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto">
+            &lt;div id="search-controls" class="flex-grow flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto hidden"&gt;
+                &lt;input type="text" id="search-input" placeholder="Search for videos or playlists..."
+                       class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 w-full sm:w-auto"&gt;
+                &lt;button id="search-button"
+                        class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto"&gt;
                     Search
-                </button>
-            </div>
-            <div id="filter-controls" class="flex flex-col sm:flex-row gap-2 w-full md:w-auto hidden">
-                <select id="type-filter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white w-full sm:w-auto">
-                    <option value="all">All</option>
-                    <option value="video">Videos</option>
-                    <option value="playlist">Playlists</option>
-                </select>
-                <select id="sort-filter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white w-full sm:w-auto">
-                    <option value="relevance">Relevance</option>
-                    <option value="date">Date</option>
-                    <option value="viewCount">View Count</option>
-                    <option value="rating">Rating</option>
-                </select>
-            </div>
-        </div>
-    </header>
+                &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div id="filter-controls" class="flex flex-col sm:flex-row gap-2 w-full md:w-auto hidden"&gt;
+                &lt;select id="type-filter"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white w-full sm:w-auto"&gt;
+                    &lt;option value="all"&gt;All&lt;/option&gt;
+                    &lt;option value="video"&gt;Videos&lt;/option&gt;
+                    &lt;option value="playlist"&gt;Playlists&lt;/option&gt;
+                &lt;/select&gt;
+                &lt;select id="sort-filter"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white w-full sm:w-auto"&gt;
+                    &lt;option value="relevance"&gt;Relevance&lt;/option&gt;
+                    &lt;option value="date"&gt;Date&lt;/option&gt;
+                    &lt;option value="viewCount"&gt;View Count&lt;/option&gt;
+                    &lt;option value="rating"&gt;Rating&lt;/option&gt;
+                &lt;/select&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
 
-    <main id="search-main" class="container mx-auto p-6">
-        <div id="loading-indicator" class="flex justify-center items-center py-10 hidden">
-            <div class="loading-spinner"></div>
-        </div>
-        <div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            </div>
-        <p id="api-key-message" class="text-center text-red-500 mt-4 hidden">Please enter your YouTube Data API Key to perform searches.</p>
-    </main>
+    &lt;main id="search-main" class="container mx-auto p-6"&gt;
+        &lt;div id="loading-indicator" class="flex justify-center items-center py-10 hidden"&gt;
+            &lt;div class="loading-spinner"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id="results-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"&gt;
+            &lt;/div&gt;
+        &lt;p id="api-key-message" class="text-center text-red-500 mt-4 hidden"&gt;Please enter your YouTube Data API Key to perform searches.&lt;/p&gt;
+    &lt;/main&gt;
 
-    <div id="player-section" class="hidden">
-        <header class="bg-white shadow-md p-4 mb-6">
-            <div class="container mx-auto flex items-center justify-between">
-                <h1 class="text-2xl font-bold text-red-600">YouTube Player</h1>
-                <button id="back-to-search-button" class="text-blue-600 hover:text-blue-800 font-medium">← Back to Search</button>
-            </div>
-        </header>
+    &lt;div id="player-section" class="hidden"&gt;
+        &lt;header class="bg-white shadow-md p-4 mb-6"&gt;
+            &lt;div class="container mx-auto flex items-center justify-between"&gt;
+                &lt;h1 class="text-2xl font-bold text-red-600"&gt;YouTube Player&lt;/h1&gt;
+                &lt;button id="back-to-search-button" class="text-blue-600 hover:text-blue-800 font-medium"&gt;&amp;leftarrow; Back to Search&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/header&gt;
 
-        <main class="container mx-auto p-6">
-            <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-                <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
-                    <input type="text" id="video-link-input" placeholder="Paste YouTube video link here..."
-                           class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                    <button id="play-button"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto">
+        &lt;main class="container mx-auto p-6"&gt;
+            &lt;div class="bg-white p-6 rounded-xl shadow-md mb-6"&gt;
+                &lt;div class="flex flex-col sm:flex-row items-center gap-4 mb-4"&gt;
+                    &lt;input type="text" id="video-link-input" placeholder="Paste YouTube video link here..."
+                           class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"&gt;
+                    &lt;button id="play-button"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out w-full sm:w-auto"&gt;
                         Play Video
-                    </button>
-                </div>
-                <div id="player-container" class="video-responsive-container hidden">
-                    </div>
-                <p id="player-message" class="text-red-500 text-center mt-4 hidden"></p>
-            </div>
-        </main>
-    </div>
+                    &lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div id="player-container" class="video-responsive-container hidden"&gt;
+                    &lt;/div&gt;
+                &lt;p id="player-message" class="text-red-500 text-center mt-4 hidden"&gt;&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
 
-    <div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-            <p id="modal-message" class="text-lg font-medium mb-4"></p>
-            <button id="modal-close-button" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">OK</button>
-        </div>
-    </div>
+    &lt;div id="message-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50"&gt;
+        &lt;div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center"&gt;
+            &lt;p id="modal-message" class="text-lg font-medium mb-4"&gt;&lt;/p&gt;
+            &lt;button id="modal-close-button" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"&gt;OK&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 
-    <script>
-        // script.js & player.js combined
+    &lt;script&gt;
+        // script.js &amp; player.js combined
 
         // IMPORTANT: For a production application, never expose your API key directly in client-side code.
         // Use a server-side proxy to make API requests to YouTube Data API.
@@ -702,6 +802,80 @@
             loadApiKey(); // Try to load API key on page load
             showSearchPage(); // Start with the search page
         });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+            </div>
+        </section>
+
+        <!-- Live Preview Section -->
+        <section id="preview-section" class="flex flex-col w-1/2 h-full bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
+            <div class="bg-gray-700 text-gray-200 p-3 font-semibold rounded-t-lg">Live Preview</div>
+            <iframe id="preview-frame" class="rounded-b-lg"></iframe>
+        </section>
+    </main>
+
+    <script>
+        const htmlCode = document.getElementById('html-code');
+        const previewFrame = document.getElementById('preview-frame');
+        const toggleEditorBtn = document.getElementById('toggle-editor-btn');
+        const downloadBtn = document.getElementById('download-btn'); // New button reference
+        const editorSection = document.getElementById('editor-section');
+        const previewSection = document.getElementById('preview-section');
+
+        /**
+         * Updates the content of the iframe with the latest HTML.
+         * The HTML is loaded directly into the iframe's srcdoc for security and isolation.
+         */
+        function updatePreview() {
+            const html = htmlCode.value;
+            // Using srcdoc is generally safer and simpler for live previews within the same origin.
+            previewFrame.srcdoc = html;
+        }
+
+        /**
+         * Toggles the visibility of the editor section and adjusts the preview section's width.
+         */
+        function toggleEditor() {
+            editorSection.classList.toggle('hidden'); // Toggles visibility of the editor
+            if (editorSection.classList.contains('hidden')) {
+                previewSection.classList.remove('w-1/2');
+                previewSection.classList.add('w-full'); // Make preview full width
+                // Remove space-x-4 from the main element when editor is hidden
+                document.querySelector('main').classList.remove('space-x-4');
+                toggleEditorBtn.textContent = 'Show Editor';
+            } else {
+                previewSection.classList.remove('w-full');
+                previewSection.classList.add('w-1/2'); // Make preview half width
+                // Add space-x-4 back to the main element when editor is shown
+                document.querySelector('main').classList.add('space-x-4');
+                toggleEditorBtn.textContent = 'Hide Editor';
+            }
+        }
+
+        /**
+         * Downloads the content of the HTML editor as an sample.html file.
+         */
+        function downloadHtml() {
+            const htmlContent = htmlCode.value;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sample.html';
+            document.body.appendChild(a); // Append to body is good practice, though not always strictly necessary for programmatic clicks
+            a.click();
+            document.body.removeChild(a); // Clean up the temporary element
+            URL.revokeObjectURL(url); // Revoke the object URL to free up resources
+        }
+
+        // Add event listeners for live updating and toggling
+        htmlCode.addEventListener('input', updatePreview);
+        toggleEditorBtn.addEventListener('click', toggleEditor);
+        downloadBtn.addEventListener('click', downloadHtml); // New event listener for download button
+
+        // Initial update to load the default code into the preview
+        window.onload = updatePreview;
     </script>
 </body>
 </html>
